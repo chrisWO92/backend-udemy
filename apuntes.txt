@@ -1,0 +1,2 @@
+npm install nodemon, y poner start en scripts: nodemon app.js
+npm install --save express-validator para validación de inputs
