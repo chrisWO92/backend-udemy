@@ -95,7 +95,12 @@ const logIn = async (req, res, next) => {
     );
     return next(error);
   }
-  res.status(201).json({ message: "Logged in!" }); // cuando es exitosa la acción
+  res
+    .status(201)
+    .json({
+      message: "Logged in!",
+      user: existingUser.toObject({ getters: true }),
+    }); // cuando es exitosa la acción
 };
 
 exports.getUsers = getUsers;

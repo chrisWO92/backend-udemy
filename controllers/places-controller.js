@@ -114,7 +114,7 @@ const createPlace = async (req, res, next) => {
     location: coordinates,
     address,
     image:
-      "https://www.dreamstime.com/dead-trees-night-rocky-field-front-huge-moon-spooky-scene-free-stock-photography-image-free-126109347",
+      "https://thumbs.dreamstime.com/z/dead-trees-night-rocky-field-front-huge-moon-spooky-scene-126109347.jpg?ct=jpeg",
     creator,
   });
 
