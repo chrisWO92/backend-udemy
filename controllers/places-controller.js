@@ -12,7 +12,7 @@ const getPlaceById = async (req, res, next) => {
   try {
     place = await Place.findById(placeId); // findById() no retorna una promesa, pero se puede usar async/await
   } catch (err) {
-    const error = HttpError(
+    const error = new HttpError(
       "Something went wrong, could not find a place.",
       500
     );
@@ -38,7 +38,7 @@ const getPlacesByUserId = async (req, res, next) => {
     places = await Place.find({ creator: userId }); // findById() no retorna una promesa, pero se puede usar async/await
     console.log(places);
   } catch (err) {
-    const error = HttpError(
+    const error = new HttpError(
       "Fetching places failed, please try again later.",
       500
     );
