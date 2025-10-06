@@ -22,7 +22,9 @@ const signUp = async (req, res, next) => {
   if (!errors.isEmpty()) {
     console.log("erroooooressssss:");
     console.log(errors);
-    return new HttpError("Invalid inputs passed, please check your data,", 422);
+    return next(
+      new HttpError("Invalid inputs passed, please check your data,", 422)
+    );
   }
 
   const { name, email, password } = req.body;
@@ -95,12 +97,10 @@ const logIn = async (req, res, next) => {
     );
     return next(error);
   }
-  res
-    .status(201)
-    .json({
-      message: "Logged in!",
-      user: existingUser.toObject({ getters: true }),
-    }); // cuando es exitosa la acción
+  res.status(201).json({
+    message: "Logged in!",
+    user: existingUser.toObject({ getters: true }),
+  }); // cuando es exitosa la acción
 };
 
 exports.getUsers = getUsers;
