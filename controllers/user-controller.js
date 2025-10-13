@@ -51,8 +51,7 @@ const signUp = async (req, res, next) => {
   const createdUser = new User({
     name,
     email,
-    image:
-      "https://www.dreamstime.com/monaco-principality-cityscape-densely-populated-urban-background-mountain-slope-houses-apartment-buildings-towers-block-stock-images-image-free-125745924",
+    image: req.file.path,
     password,
     places: [],
   });

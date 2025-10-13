@@ -5,6 +5,7 @@ const HttpError = require("../models/http-error");
 const getCoordsForAddress = require("../util/location");
 const Place = require("../models/place");
 const User = require("../models/user");
+const fs = require("fs");
 
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.pid;
@@ -113,8 +114,7 @@ const createPlace = async (req, res, next) => {
     description,
     location: coordinates,
     address,
-    image:
-      "https://thumbs.dreamstime.com/z/dead-trees-night-rocky-field-front-huge-moon-spooky-scene-126109347.jpg?ct=jpeg",
+    image: req.file.path,
     creator,
   });
 
@@ -218,7 +218,7 @@ const deletePlace = async (req, res, next) => {
     return next(error);
   }
 
-  console.log(user);
+  const imagePath = place.image;
 
   try {
     const sess = await mongoose.startSession();
@@ -235,7 +235,10 @@ const deletePlace = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(200).json({ place: place.toObject({ getters: true }) }); // cuando es exitosa la acción
+  fs.unlink(imagePath, (err) => {
+    console.log(err);
+    res.status(200).json({ place: place.toObject({ getters: true }) }); // cuando es exitosa la acción
+  });
 };
 
 exports.getPlaceById = getPlaceById;

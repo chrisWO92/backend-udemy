@@ -1,6 +1,8 @@
+const fs = require("fs");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const path = require("path");
 
 const placeRoutes = require("./routes/places-routes");
 const userRoutes = require("./routes/user-routes");
@@ -9,6 +11,8 @@ const HttpError = require("./models/http-error");
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 /* 
   El siguiente middleware se incluye para corregir el error de CORS.
@@ -40,6 +44,11 @@ app.use((req, res, next) => {
 // middleware
 // si le pasamos 4 parámetros a un middleware, se tomará automáticamente como un middleware de manejo de errores
 app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    });
+  }
   // ya se envío una respuesta?
   if (res.headerSent) {
     return next(error);
