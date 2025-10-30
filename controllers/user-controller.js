@@ -76,26 +76,28 @@ const signUp = async (req, res, next) => {
     return next(error);
   }
 
-  let token
+  let token;
   try {
-    token = jwt.sign({
-      userId: createdUser.id,
-      email: createdUser.email
-    }, 
-    'supersecret_dont_share', 
-    { expiresIn: '1h' })
-    
+    token = jwt.sign(
+      {
+        userId: createdUser.id,
+        email: createdUser.email,
+      },
+      "supersecret_dont_share",
+      { expiresIn: "1h" }
+    );
   } catch (err) {
     const error = new HttpError("Signing up failed, please try again.", 500);
     return next(error);
   }
 
-
   //res.status(201).json({ user: createdUser }); // cuando es exitosa la acción
 
   //res.status(200).json({ place: place.toObject({ getters: true }) }); // cuando es exitosa la acción
 
-  res.status(201).json({ user: createdUser.id, email: createdUser.email, token: token }); // cuando es exitosa la acción
+  res
+    .status(201)
+    .json({ userId: createdUser.id, email: createdUser.email, token: token }); // cuando es exitosa la acción
 };
 
 const logIn = async (req, res, next) => {
@@ -117,14 +119,14 @@ const logIn = async (req, res, next) => {
   if (!existingUser) {
     const error = new HttpError(
       "Invalid credentials, could not log you in",
-      500
+      403
     );
     return next(error);
   }
 
   let isValidPassword = false;
   try {
-    isValidPassword = await bcrypt.compare(pawwsord, existingUser.password);
+    isValidPassword = await bcrypt.compare(password, existingUser.password);
   } catch (error) {
     const err = new HttpError(
       "Could not log you in, please check your credentials and try again",
@@ -136,20 +138,21 @@ const logIn = async (req, res, next) => {
   if (!isValidPassword) {
     const error = new HttpError(
       "Invalid credentials, could not log you in",
-      500
+      403
     );
     return next(error);
   }
 
-    let token
+  let token;
   try {
-    token = jwt.sign({
-      userId: existingUser.id,
-      email: existingUser.email
-    }, 
-    'supersecret_dont_share', 
-    { expiresIn: '1h' })
-    
+    token = jwt.sign(
+      {
+        userId: existingUser.id,
+        email: existingUser.email,
+      },
+      "supersecret_dont_share",
+      { expiresIn: "1h" }
+    );
   } catch (err) {
     const error = new HttpError("Loggin in failed, please try again.", 500);
     return next(error);
@@ -158,7 +161,7 @@ const logIn = async (req, res, next) => {
   res.status(201).json({
     userId: existingUser.id,
     email: existingUser.email,
-    token: token
+    token: token,
   }); // cuando es exitosa la acción
 };
 
